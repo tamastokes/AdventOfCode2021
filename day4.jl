@@ -32,22 +32,25 @@ end
 
 function bingo(filename)
     (drawnNumbers, (nboards, boards)) = processInput(filename)
+    winningBoards = zeros(Int32, 0)
     for n in 1:length(drawnNumbers)
         for board in 1:nboards
-            for row in 1:5
-                # note our matrices are transcribed,
-                # cols and rows are interpreded just the other way arond
-                if isBingo(drawnNumbers[1:n], boards[:, row, board])
-                    @show board, "row: ", row, n, 
-                    return calcScore(boards[:, :, board], drawnNumbers[1:n])
+            if !in(board, winningBoards)
+                for row in 1:5
+                    # note our matrices are transcribed,
+                    # cols and rows are interpreded just the other way arond
+                    if isBingo(drawnNumbers[1:n], boards[:, row, board])
+                        @show board, "row: ", row, n, calcScore(boards[:, :, board], drawnNumbers[1:n])
+                        append!(winningBoards, board)
+                    end
                 end
-            end
-            for col in 1:5
-                # note our matrices are transcribed,
-                # cols and rows are interpreded just the other way arond
-                if isBingo(drawnNumbers[1:n], boards[col, :, board])
-                    @show board, "col: ", col, n
-                    return calcScore(boards[:, :, board], drawnNumbers[1:n])
+                for col in 1:5
+                    # note our matrices are transcribed,
+                    # cols and rows are interpreded just the other way arond
+                    if isBingo(drawnNumbers[1:n], boards[col, :, board])
+                        @show board, "col: ", col, n, calcScore(boards[:, :, board], drawnNumbers[1:n])
+                        append!(winningBoards, board)
+                    end
                 end
             end
         end
