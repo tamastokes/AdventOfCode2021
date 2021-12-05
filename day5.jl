@@ -15,7 +15,11 @@ function processInput(filename)
 end
 
 function getSequence(n1, n2)
-    return min(n1,n2):max(n1,n2)
+    if n1 < n2
+        return range(n1,n2)
+    else
+        return range(start=n1, step=-1, stop=n2)
+    end
 end
 
 function getPointsInLine(line)
@@ -30,8 +34,15 @@ function getPointsInLine(line)
             append!(points, i)
             append!(points, line[2])
         end
-    end
-    return transpose(reshape(points, 2, :))
+    else # only for part 2, delete the else case for part 1
+        xs = getSequence(line[1],line[3])
+        ys = getSequence(line[2],line[4])
+        for i in 1:length(xs)
+            append!(points, xs[i])
+            append!(points, ys[i])
+        end
+     end
+     return transpose(reshape(points, 2, :))
 end
 
 function fillGrid(lines)
